@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "EmployeeManagement\WebApi.csproj", "{219F6C1F-DCE5-4A25-8111-F7E43312A2ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "EmployeeManagement\WebApi.csproj", "{219F6C1F-DCE5-4A25-8111-F7E43312A2ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{FB787214-7E8C-48D0-924C-D84CDC5D10FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{FB787214-7E8C-48D0-924C-D84CDC5D10FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelLayer", "ModelLayer\ModelLayer.csproj", "{F2BF9CCA-8A88-4B3F-9DB0-6A8272A82676}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelLayer", "ModelLayer\ModelLayer.csproj", "{F2BF9CCA-8A88-4B3F-9DB0-6A8272A82676}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{1C0340C5-C8D0-4D73-B0D5-06C8BA25AA7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataLayer\DataLayer.csproj", "{1C0340C5-C8D0-4D73-B0D5-06C8BA25AA7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedLibrary", "SharedLibrary\SharedLibrary.csproj", "{FC5438BB-4789-48B4-9387-39FDC09279DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{1C0340C5-C8D0-4D73-B0D5-06C8BA25AA7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C0340C5-C8D0-4D73-B0D5-06C8BA25AA7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C0340C5-C8D0-4D73-B0D5-06C8BA25AA7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC5438BB-4789-48B4-9387-39FDC09279DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC5438BB-4789-48B4-9387-39FDC09279DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC5438BB-4789-48B4-9387-39FDC09279DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC5438BB-4789-48B4-9387-39FDC09279DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
