@@ -21,6 +21,7 @@ namespace WebApi
             this.accountManager = new AccountManager(repository, mapper);
         }
 
+        [HttpPost("login")]
         public IActionResult Post(LoginRequest loginRequest)
         {
            var user = accountManager.LogIn(loginRequest);
