@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DataLayer;
 using ModelLayer;
+using SharedLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,12 +23,14 @@ namespace BusinessLayer
 
         public LoginResponse LogIn(LoginRequest loginRequest)
         {
-          var user = repository.FindBy<User>(x => x.Email == loginRequest.Email && x.Password == loginRequest.password);
+          var user = repository.FindBy<User>(x => x.Email == loginRequest.Email && x.IsDeleted == false).FirstOrDefault();
             if (user != null)
             {
-                return mapper.Map<LoginResponse>(user);
+                if(user.Password.Equals(AppEncryption.CreatePasswordHash(loginRequest.password,user.Salt)))
+                    return mapper.Map<LoginResponse>(user); 
             }
             return null;
+        
         }
     }
 }

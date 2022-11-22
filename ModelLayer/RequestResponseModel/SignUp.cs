@@ -9,13 +9,17 @@ namespace ModelLayer
 {
     public class SignUpRequest
     {
+
+        public string Name { get; set; }
+
         public string Email { get; set; }
 
         public Gender Gender { get; set; }
 
         public string ContactNo { get; set; }
 
-        public UserRole UserRole { get; set; }  
+        public UserRole UserRole { get; set; }
+
 
         public string Password { get; set; }
 

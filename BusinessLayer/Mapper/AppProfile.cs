@@ -16,12 +16,29 @@ namespace BusinessLayer
             CreateMap<SignUpRequest, User>();
         }
     }
-    public sealed class LogInprofile :Profile
+    public sealed class LogInProfile :Profile
     {
-        public LogInprofile()
+        public LogInProfile()
         {
             CreateMap<LoginRequest, User>();
             CreateMap<User, LoginResponse>();   
+        }
+    }
+
+    public sealed class UserProfile :Profile
+    {
+        public UserProfile()
+        {
+            CreateMap<UserRequest, User>();
+            CreateMap<User, UserResponse>();
+        }
+    }
+
+    public sealed class UpdateProfile :Profile
+    {
+        public UpdateProfile()
+        {
+            CreateMap<UpdateUserRequest, User>();
         }
     }
 }

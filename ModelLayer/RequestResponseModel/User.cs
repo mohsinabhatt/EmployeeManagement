@@ -8,8 +8,11 @@ namespace ModelLayer
 {
     public class UserRequest
     {
+        public Guid Id { get; set; }
+
         public string Email { get; set; }
 
+        public string Name { get; set; }
 
         public Gender Gender { get; set; }
 
@@ -30,8 +33,30 @@ namespace ModelLayer
 
     }
 
-    public class UserResponse :UserRequest
+    public class UserResponse 
     {
+        public string Email { get; set; }
 
+        public string Name { get; set; }
+
+        public Gender Gender { get; set; }
+
+        public string ContactNo { get; set; }
+
+        public UserRole UserRole { get; set; }
+
+    }
+
+    public class UpdateUserRequest
+    {
+        public Guid Id { get; set; }
+
+        public string Name { get; set; }
+
+        public Gender Gender { get; set; }
+
+        public string ContactNo { get; set; }
+
+        public UserRole UserRole { get; set; }
     }
 }

@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ModelLayer\ModelLayer.csproj" />
+    <ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj" />
   </ItemGroup>
 
 </Project>

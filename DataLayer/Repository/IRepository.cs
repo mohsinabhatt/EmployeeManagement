@@ -8,10 +8,10 @@ namespace DataLayer
 {
     public interface IRepository
     {
-        IQueryable<T> Get<T>() where T : class;
+        IQueryable<T> GetAll<T>() where T : class;
 
 
-        T GetbyId<T>(Guid id) where T : class;
+        T GetById<T>(Guid id) where T : class;
 
 
         int AddAndSave<T>(T model) where T : class;
