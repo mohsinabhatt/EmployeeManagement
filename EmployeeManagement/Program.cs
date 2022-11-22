@@ -1,5 +1,8 @@
+using AutoMapper;
+using BusinessLayer;
 using DataLayer;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IRepository, Repository>();
+builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(AppProfile)));
 builder.Services.AddDbContextPool<AppDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString(nameof(AppDbContext))));
 

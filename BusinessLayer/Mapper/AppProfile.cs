@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer
 {
-    sealed class AppProfile :Profile
+    public sealed class AppProfile :Profile
     {
       public AppProfile()
         {
             CreateMap<SignUpRequest, User>();
         }
     }
-    sealed class LogInprofile :Profile
+    public sealed class LogInprofile :Profile
     {
         public LogInprofile()
         {
