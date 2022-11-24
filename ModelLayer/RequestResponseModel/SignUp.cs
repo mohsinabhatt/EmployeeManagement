@@ -28,7 +28,7 @@ namespace ModelLayer
         public string ConfirmPassword { get; set; }
     }
 
-    public class SignUpresponse
+    public class SignUpResponse
     {
 
         public Guid Id { get; set; }

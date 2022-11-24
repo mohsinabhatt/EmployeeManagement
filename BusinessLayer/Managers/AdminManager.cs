@@ -22,8 +22,9 @@ namespace BusinessLayer
             this.adminRepository = adminRepository;
         }
 
-        public SignUpRequest AddUser(SignUpRequest signUpRequest)
+        public SignUpResponse AddUser(SignUpRequest signUpRequest)
         {
+            SignUpResponse signUpResponse = new SignUpResponse();
             var user = mapper.Map<User>(signUpRequest);
             user.Salt = AppEncryption.CreateSalt();
             user.IsActive = true;
@@ -31,8 +32,14 @@ namespace BusinessLayer
             user.Id = Guid.NewGuid();
             user.Password = AppEncryption.CreatePasswordHash(signUpRequest.Password, user.Salt);
             if (adminRepository.AddAndSave(user) != 0)
-                return signUpRequest;
-                return null;  
+                signUpResponse.Id = user.Id;
+                signUpResponse.Email = user.Email;
+                signUpResponse.UserRole = user.UserRole;
+                signUpResponse.ContactNo = user.ContactNo;
+                signUpResponse.Gender = user.Gender;
+            //return mapper.Map<User,SignUpResponse>(user);
+            return signUpResponse;
+            return null;  
         }
 
         public IEnumerable<UserResponse> GetAll()
