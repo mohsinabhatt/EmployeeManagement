@@ -14,6 +14,7 @@ namespace BusinessLayer
       public AppProfile()
         {
             CreateMap<SignUpRequest, User>();
+            CreateMap<User,SignUpResponse>();
         }
     }
     public sealed class LogInProfile :Profile

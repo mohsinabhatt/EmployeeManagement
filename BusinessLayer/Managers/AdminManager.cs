@@ -32,14 +32,8 @@ namespace BusinessLayer
             user.Id = Guid.NewGuid();
             user.Password = AppEncryption.CreatePasswordHash(signUpRequest.Password, user.Salt);
             if (adminRepository.AddAndSave(user) != 0)
-                signUpResponse.Id = user.Id;
-                signUpResponse.Email = user.Email;
-                signUpResponse.UserRole = user.UserRole;
-                signUpResponse.ContactNo = user.ContactNo;
-                signUpResponse.Gender = user.Gender;
-            //return mapper.Map<User,SignUpResponse>(user);
-            return signUpResponse;
-            return null;  
+              return  mapper.Map<SignUpResponse>(user);
+              return null;  
         }
 
         public IEnumerable<UserResponse> GetAll()
