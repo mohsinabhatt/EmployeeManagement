@@ -3,6 +3,7 @@ using BusinessLayer;
 using DataLayer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SharedLibrary;
 using System.Reflection;
@@ -36,6 +37,16 @@ builder.Services.AddAuthentication(x =>
         ValidAudience = builder.Configuration["JWT:Bearer"],
         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("JWT:Key"))
     };
+});
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("EmployeeManagement", policy =>
+    {
+        policy.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .WithExposedHeaders("*");
+    });
 });
 
 builder.Services.AddEndpointsApiExplorer();
