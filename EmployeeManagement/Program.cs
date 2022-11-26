@@ -60,6 +60,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("EmployeeManagement");
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
