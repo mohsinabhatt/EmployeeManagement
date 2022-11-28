@@ -42,4 +42,22 @@ namespace BusinessLayer
             CreateMap<UpdateUserRequest, User>();
         }
     }
+
+    public sealed class EmployeeProfile :Profile
+    {
+        public EmployeeProfile()
+        {
+            CreateMap<EmployeeRequest, Employee>();
+            CreateMap<Employee, EmployeeResponse>();    
+        }
+    }
+
+    public sealed class EmployeeSignupProfile :Profile
+    {
+        public EmployeeSignupProfile()
+        {
+            CreateMap<EmployeeSignUpRequest, Employee>();
+            CreateMap<Employee, EmployeeSingUpResponse>();
+        }
+    }
 }

@@ -17,6 +17,8 @@ namespace DataLayer
         #region DbSets
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+
 
         #endregion
     }

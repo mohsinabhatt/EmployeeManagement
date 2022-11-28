@@ -18,11 +18,17 @@ namespace DataLayer
             this.dbContext = dbContext;
         }
 
-        public IEnumerable<UserResponse> GetAllUsers()
+        public IEnumerable<UserResponse> GetAllAdmins()
         {
             var query = @$"Select * From Users Where IsDeleted = 0 ";
-            var result = FromQuery<UserResponse>(query);
-            return result;
+            return FromQuery<UserResponse>(query);
+        }
+
+
+        public IEnumerable<EmployeeResponse> GetAllEmployees()
+        {
+            var query = $@"select * from Employees Where IsDeleted = 0";
+            return FromQuery<EmployeeResponse>(query);
         }
 
         //public int DeleteUser(Guid id)

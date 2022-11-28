@@ -37,6 +37,7 @@ namespace ModelLayer
     {
 
         public Guid Id { get; set; }
+
         public string Email { get; set; }
 
         public string Name { get; set; }
@@ -46,6 +47,10 @@ namespace ModelLayer
         public string ContactNo { get; set; }
 
         public UserRole UserRole { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public bool IsDeleted { get; set; }
 
     }
 
@@ -60,5 +65,9 @@ namespace ModelLayer
         public string ContactNo { get; set; }
 
         public UserRole UserRole { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }
