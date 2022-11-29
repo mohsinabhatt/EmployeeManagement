@@ -35,7 +35,7 @@ namespace WebApi
                 return Ok(loginResponse);
 
             }
-            return BadRequest();
+            return BadRequest("Invalid Credentials");
         }
 
         private string GenerateJSONWebToken(LoginResponse loginResponse)
