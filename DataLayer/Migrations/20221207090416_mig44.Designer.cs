@@ -4,6 +4,7 @@ using DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221207090416_mig44")]
+    partial class mig44
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,10 +77,6 @@ namespace DataLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("SalaryId")
-                        .IsRequired()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("UserRole")
                         .HasColumnType("int");
 
@@ -85,51 +84,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("DeptId");
 
-                    b.HasIndex("SalaryId");
-
                     b.ToTable("Employees");
-                });
-
-            modelBuilder.Entity("DataLayer.Salary", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("BasicSalary")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DA")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HRA")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TA")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Salaries");
-                });
-
-            modelBuilder.Entity("DataLayer.SalaryDeduction", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Leave")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PF")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalSalary")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SalaryDeductions");
                 });
 
             modelBuilder.Entity("DataLayer.User", b =>
@@ -181,39 +136,12 @@ namespace DataLayer.Migrations
                         .WithMany("Employees")
                         .HasForeignKey("DeptId");
 
-                    b.HasOne("DataLayer.Salary", "Salary")
-                        .WithMany("Employees")
-                        .HasForeignKey("SalaryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Department");
-
-                    b.Navigation("Salary");
-                });
-
-            modelBuilder.Entity("DataLayer.SalaryDeduction", b =>
-                {
-                    b.HasOne("DataLayer.Salary", "Salary")
-                        .WithOne("SalaryDeduction")
-                        .HasForeignKey("DataLayer.SalaryDeduction", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Salary");
                 });
 
             modelBuilder.Entity("DataLayer.Department", b =>
                 {
                     b.Navigation("Employees");
-                });
-
-            modelBuilder.Entity("DataLayer.Salary", b =>
-                {
-                    b.Navigation("Employees");
-
-                    b.Navigation("SalaryDeduction")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

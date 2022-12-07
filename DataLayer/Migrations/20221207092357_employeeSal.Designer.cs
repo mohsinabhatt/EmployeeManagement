@@ -4,6 +4,7 @@ using DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221207092357_employeeSal")]
+    partial class employeeSal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,18 +77,12 @@ namespace DataLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("SalaryId")
-                        .IsRequired()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("UserRole")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DeptId");
-
-                    b.HasIndex("SalaryId");
 
                     b.ToTable("Employees");
                 });
@@ -102,6 +99,9 @@ namespace DataLayer.Migrations
                     b.Property<int>("DA")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("HRA")
                         .HasColumnType("int");
 
@@ -109,6 +109,8 @@ namespace DataLayer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Salaries");
                 });
@@ -181,15 +183,18 @@ namespace DataLayer.Migrations
                         .WithMany("Employees")
                         .HasForeignKey("DeptId");
 
-                    b.HasOne("DataLayer.Salary", "Salary")
-                        .WithMany("Employees")
-                        .HasForeignKey("SalaryId")
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("DataLayer.Salary", b =>
+                {
+                    b.HasOne("DataLayer.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Department");
-
-                    b.Navigation("Salary");
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("DataLayer.SalaryDeduction", b =>
@@ -210,8 +215,6 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.Salary", b =>
                 {
-                    b.Navigation("Employees");
-
                     b.Navigation("SalaryDeduction")
                         .IsRequired();
                 });

@@ -36,5 +36,10 @@ namespace DataLayer
 
         public Department Department { get; set; }
 
+        public Guid? SalaryId { get; set; }
+
+        [ForeignKey(nameof(SalaryId))]  
+        public Salary Salary { get; set; }
+
     }
 }
