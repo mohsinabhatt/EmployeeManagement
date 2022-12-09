@@ -31,15 +31,15 @@ namespace DataLayer
         public string? EmpCode { get; set; }
 
 
-        [ForeignKey(nameof(Department))]
         public Guid? DeptId { get; set; }
 
+
+        [ForeignKey(nameof(DeptId))]
         public Department Department { get; set; }
 
-        public Guid? SalaryId { get; set; }
 
-        [ForeignKey(nameof(SalaryId))]  
         public Salary Salary { get; set; }
+
 
     }
 }

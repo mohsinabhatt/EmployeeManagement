@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ModelLayer;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace DataLayer
     {
         public Guid Id { get; set; }
 
-        public int LegalLeaves { get; set; }
+        public LegalLeave LegalLeaves { get; set; }
 
         public int NoOfLeaves { get; set; }
 

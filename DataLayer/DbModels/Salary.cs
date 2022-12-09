@@ -19,7 +19,12 @@ namespace DataLayer
 
         public int HRA { get; set; }
 
-        public ICollection<Employee> Employees { get; set; }
+        public Guid? EmpId { get; set; }
+
+
+        [ForeignKey(nameof(EmpId))]
+        public Employee Employee { get; set; }
+
 
         public SalaryDeduction SalaryDeduction { get; set; }
     }

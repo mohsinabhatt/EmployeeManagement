@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using ModelLayer;
+using System.Diagnostics.Contracts;
 
 namespace WebApi
 {
@@ -110,5 +111,32 @@ namespace WebApi
             if (user != null) return Ok(user);
             return BadRequest();
         }
+
+
+        [HttpPost("AddSalary/{empId:guid}")]
+        public IActionResult AddSalary([FromRoute] Guid empId,[FromBody] SalaryRequest salaryRequest)
+        {
+            var salary = adminManager.AddSalary(empId,salaryRequest);   
+            if(salary != null) return Ok(salary);
+            return BadRequest();
+        }
+
+
+        [HttpGet("SalaryByEmpId{empId:guid}")]
+        public IActionResult GetSalaryByEmpId(Guid empId)
+        {
+            var salary = adminManager.GetSalaryByEmpId(empId);
+            if (salary != null) return Ok(salary);
+            return BadRequest();
+        }
+
+        [HttpPut("Salary")]
+        public IActionResult UpdateSalary([FromBody] UpdateSalaryRequest updateSalary)
+        {
+            var salary = adminManager.UpdateSalary(updateSalary);
+            if (salary != 0) return Ok(salary);
+            return BadRequest();
+        }
     }
+
 }

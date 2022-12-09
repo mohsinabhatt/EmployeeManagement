@@ -102,5 +102,39 @@ namespace BusinessLayer
                 return employee;
             return null;
         }
+
+        public SalaryRequest AddSalary(Guid empId, SalaryRequest salaryRequest)
+        {
+            var employee = adminRepository.GetById<Employee>(empId);
+            var sal = adminRepository.FindBy<Salary>(x => x.EmpId == empId).FirstOrDefault();
+            if (sal == null)
+            {
+                if (employee != null)
+                {
+                    var salary = mapper.Map<Salary>(salaryRequest);
+                    salary.Id = Guid.NewGuid();
+                    salary.EmpId = employee.Id;
+                    if (adminRepository.AddAndSave(salary) != 0)
+                        return salaryRequest;
+                }
+            }
+                else
+                   return null;
+            return null;
+        }
+
+        public SalaryResponse GetSalaryByEmpId(Guid empId)
+        {
+            return adminRepository.GetSalaryByEmpId(empId);
+        }
+
+        public int UpdateSalary(UpdateSalaryRequest updateSalary)
+        {
+            return adminRepository.UpdateSalary(updateSalary);
+          //var salary = mapper.Map<Salary>(updateSalary);
+          //  if (adminRepository.UpdateAndSave(salary) != 0)
+          //      return updateSalary;
+          //  return null;
+        }
     }
 }

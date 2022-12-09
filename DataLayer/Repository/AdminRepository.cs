@@ -31,10 +31,19 @@ namespace DataLayer
             return FromQuery<EmployeeResponse>(query);
         }
 
-        //public int DeleteUser(Guid id)
-        //{
-        //    var query = $@"Update Users set IsDeleted = 1 where id ='{id}'"; 
-        //    return ExecuteQuery(query);
-        //}
+       public SalaryResponse GetSalaryByEmpId(Guid empId)
+        {
+            var query = $@" select * from Salaries where EmpId= '{empId}' ";
+            return GetObject<SalaryResponse>(query);
+        }
+
+        public int UpdateSalary(UpdateSalaryRequest updateSalary)
+        {
+            string query = $@"Update Salaries Set BasicSalary='{updateSalary.BasicSalary}',
+                           TA ='{updateSalary.TA}',
+                           HRA='{updateSalary.HRA}' 
+                           where id ='{updateSalary.Id}'";
+            return ExecuteQuery(query);
+        }
     }
 }

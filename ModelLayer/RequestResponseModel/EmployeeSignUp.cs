@@ -17,6 +17,12 @@ namespace ModelLayer
         public string Address { get; set; }
 
         public string ContactNo { get; set; }
+
+        //public Guid? SalaryId { get; set; }
+
+        public string EmpCode { get; set; }
+
+
     }
 
     public class EmployeeSingUpResponse :EmployeeSignUpRequest

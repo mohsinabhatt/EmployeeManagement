@@ -65,6 +65,11 @@ namespace DataLayer
         {
             return dbContext.Database.ExecuteSqlRaw(query, parameters);
         }
+
+        public T GetObject<T>(string sql, params object[] parameters) where T : class
+        {
+            return dbContext.SqlQuery<T>(sql, parameters).FirstOrDefault();
+        }
     }
 
 

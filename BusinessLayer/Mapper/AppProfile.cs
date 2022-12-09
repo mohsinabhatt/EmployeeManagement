@@ -60,4 +60,21 @@ namespace BusinessLayer
             CreateMap<Employee, EmployeeSingUpResponse>();
         }
     }
+
+    public sealed class SalaryProfile : Profile
+    {
+        public SalaryProfile()
+        {
+            CreateMap<SalaryRequest,Salary>();
+            CreateMap<Salary, SalaryResponse>();    
+        }
+    }
+
+    public sealed class UpdateSalaryProfile :Profile
+    {
+        public UpdateSalaryProfile()
+        {
+            CreateMap<UpdateSalaryRequest, Salary>();   
+        }
+    }
 }
