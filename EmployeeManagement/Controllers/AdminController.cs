@@ -137,6 +137,30 @@ namespace WebApi
             if (salary != 0) return Ok(salary);
             return BadRequest();
         }
+
+        [HttpPost("LeaveDetail")]
+        public IActionResult EntryLeave([FromBody] LeaveDetailRequest leaveDetailRequest)
+        {
+            var leave = adminManager.EntryLeave(leaveDetailRequest);    
+            if(leave != null) return Ok(leave);
+            return BadRequest();
+        }
+
+        [HttpPost("Leave")]
+        public IActionResult LeaveEmp([FromBody] LeaveRequest leaveRequest)
+        {
+            var leave = adminManager.LeaveCount(leaveRequest);
+            if(leave != null) return Ok(leave);    
+            return BadRequest();    
+        }
+
+        [HttpPost("Updateleave")]
+        public IActionResult UpdateLeave(UpdateLeaveRequest updateLeaveRequest)
+        {
+            var leave = adminManager.UpdateLeave(updateLeaveRequest);
+            if (leave != null) return Ok(leave);
+            return BadRequest();
+        }
     }
 
 }

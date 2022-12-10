@@ -41,8 +41,6 @@ namespace ModelLayer
 
     public class SalaryDeductionRequest
     {
-        public Guid Id { get; set; }
-
         public int LeaveDeductedSal { get; set; }
 
         public int PF { get; set; }
@@ -52,24 +50,6 @@ namespace ModelLayer
     }
     public class SalaryDeductionResponse :SalaryDeductionRequest
     {
-
-    }
-
-    public class LeaveRequest
-    {
         public Guid Id { get; set; }
-
-        public LegalLeave LegalLeaves { get; set; }
-
-        public int NoOfLeaves { get; set; }
-
-        public int TotalLeaves { get; set; }
-
-        public Guid? SalaryDeductionId { get; set; }
-    }
-
-    public class LeaveResponse :LeaveRequest
-    {
-
     }
 }

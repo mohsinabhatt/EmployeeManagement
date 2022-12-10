@@ -45,5 +45,11 @@ namespace DataLayer
                            where id ='{updateSalary.Id}'";
             return ExecuteQuery(query);
         }
+
+        public IEnumerable<LeaveDetailResponse> GetDetailLeaveByEmpId(Guid empId)
+        {
+            var query = $@" Select * from LeaveDetails where EmpId='{empId}'";
+            return FromQuery<LeaveDetailResponse>(query);
+        }
     }
 }

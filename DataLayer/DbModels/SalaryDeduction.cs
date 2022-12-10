@@ -20,6 +20,11 @@ namespace DataLayer
 
         public Salary Salary { get; set; }
 
-        public ICollection<Leave> Leaves { get; set; }
+
+        public Guid? LeaveId { get; set; }
+
+
+        [ForeignKey(nameof(LeaveId))]
+        public Leave leave { get; set; }
     }
 }

@@ -77,4 +77,15 @@ namespace BusinessLayer
             CreateMap<UpdateSalaryRequest, Salary>();   
         }
     }
+
+
+    public sealed class UpdateLeaveProfile :Profile
+    {
+        public UpdateLeaveProfile()
+        {
+            CreateMap<UpdateLeaveRequest, Leave>();
+        }
+    }
+
+ 
 }

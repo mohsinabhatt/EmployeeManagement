@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221208063319_mny")]
-    partial class mny
+    [Migration("20221209125131_datetime")]
+    partial class datetime
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,6 +64,9 @@ namespace DataLayer.Migrations
                     b.Property<string>("EmpCode")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("EmpId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
@@ -77,10 +80,6 @@ namespace DataLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("SalaryId")
-                        .IsRequired()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("UserRole")
                         .HasColumnType("int");
 
@@ -88,7 +87,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("DeptId");
 
-                    b.HasIndex("SalaryId");
+                    b.HasIndex("EmpId");
 
                     b.ToTable("Employees");
                 });
@@ -105,18 +104,29 @@ namespace DataLayer.Migrations
                     b.Property<int>("NoOfLeaves")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("SalaryDeductionId")
-                        .IsRequired()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("TotalLeaves")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SalaryDeductionId");
-
                     b.ToTable("Leaves");
+                });
+
+            modelBuilder.Entity("DataLayer.LeaveDetails", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmpId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LeaveDetails");
                 });
 
             modelBuilder.Entity("DataLayer.Salary", b =>
@@ -131,7 +141,7 @@ namespace DataLayer.Migrations
                     b.Property<int>("DA")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("EmpId")
+                    b.Property<Guid?>("EmpId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("HRA")
@@ -141,6 +151,10 @@ namespace DataLayer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmpId")
+                        .IsUnique()
+                        .HasFilter("[EmpId] IS NOT NULL");
 
                     b.ToTable("Salaries");
                 });
@@ -153,6 +167,10 @@ namespace DataLayer.Migrations
                     b.Property<int>("LeaveDeductedSal")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("LeaveId")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("PF")
                         .HasColumnType("int");
 
@@ -160,6 +178,9 @@ namespace DataLayer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LeaveId")
+                        .IsUnique();
 
                     b.ToTable("SalaryDeductions");
                 });
@@ -213,26 +234,20 @@ namespace DataLayer.Migrations
                         .WithMany("Employees")
                         .HasForeignKey("DeptId");
 
-                    b.HasOne("DataLayer.Salary", "Salary")
+                    b.HasOne("DataLayer.LeaveDetails", null)
                         .WithMany("Employees")
-                        .HasForeignKey("SalaryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EmpId");
 
                     b.Navigation("Department");
-
-                    b.Navigation("Salary");
                 });
 
-            modelBuilder.Entity("DataLayer.Leave", b =>
+            modelBuilder.Entity("DataLayer.Salary", b =>
                 {
-                    b.HasOne("DataLayer.SalaryDeduction", "SalaryDeduction")
-                        .WithMany("Leaves")
-                        .HasForeignKey("SalaryDeductionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("DataLayer.Employee", "Employee")
+                        .WithOne("Salary")
+                        .HasForeignKey("DataLayer.Salary", "EmpId");
 
-                    b.Navigation("SalaryDeduction");
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("DataLayer.SalaryDeduction", b =>
@@ -243,7 +258,15 @@ namespace DataLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DataLayer.Leave", "leave")
+                        .WithOne("SalaryDeduction")
+                        .HasForeignKey("DataLayer.SalaryDeduction", "LeaveId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Salary");
+
+                    b.Navigation("leave");
                 });
 
             modelBuilder.Entity("DataLayer.Department", b =>
@@ -251,17 +274,27 @@ namespace DataLayer.Migrations
                     b.Navigation("Employees");
                 });
 
-            modelBuilder.Entity("DataLayer.Salary", b =>
+            modelBuilder.Entity("DataLayer.Employee", b =>
                 {
-                    b.Navigation("Employees");
+                    b.Navigation("Salary")
+                        .IsRequired();
+                });
 
+            modelBuilder.Entity("DataLayer.Leave", b =>
+                {
                     b.Navigation("SalaryDeduction")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DataLayer.SalaryDeduction", b =>
+            modelBuilder.Entity("DataLayer.LeaveDetails", b =>
                 {
-                    b.Navigation("Leaves");
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("DataLayer.Salary", b =>
+                {
+                    b.Navigation("SalaryDeduction")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

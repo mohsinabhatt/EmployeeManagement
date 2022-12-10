@@ -25,7 +25,6 @@ namespace DataLayer
         [ForeignKey(nameof(EmpId))]
         public Employee Employee { get; set; }
 
-
         public SalaryDeduction SalaryDeduction { get; set; }
     }
 }

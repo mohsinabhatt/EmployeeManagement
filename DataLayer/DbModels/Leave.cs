@@ -12,16 +12,21 @@ namespace DataLayer
     {
         public Guid Id { get; set; }
 
-        public LegalLeave LegalLeaves { get; set; }
+        public int LegalLeaves { get; set; }   
 
         public int NoOfLeaves { get; set; }
 
         public int TotalLeaves { get; set; }
 
-        public Guid? SalaryDeductionId { get; set; }
+        public DateTime Date { get; set; }
 
 
-        [ForeignKey(nameof(SalaryDeductionId))] 
+        public Guid EmpId { get; set; }
+
+
+        [ForeignKey(nameof(EmpId))]
+        public Employee Employee { get; set; }
+
         public SalaryDeduction SalaryDeduction { get; set; }
 
     }
