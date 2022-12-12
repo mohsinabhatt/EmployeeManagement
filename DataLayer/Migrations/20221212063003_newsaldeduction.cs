@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class ddtailsleavetable : Migration
+    public partial class newsaldeduction : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,20 +34,6 @@ namespace DataLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LeaveDetails", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Leaves",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LegalLeaves = table.Column<int>(type: "int", nullable: false),
-                    NoOfLeaves = table.Column<int>(type: "int", nullable: false),
-                    TotalLeaves = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Leaves", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -101,6 +87,28 @@ namespace DataLayer.Migrations
                         column: x => x.EmpId,
                         principalTable: "LeaveDetails",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Leaves",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LegalLeaves = table.Column<int>(type: "int", nullable: false),
+                    NoOfLeaves = table.Column<int>(type: "int", nullable: false),
+                    TotalLeaves = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EmpId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Leaves", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Leaves_Employees_EmpId",
+                        column: x => x.EmpId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -159,6 +167,11 @@ namespace DataLayer.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_EmpId",
                 table: "Employees",
+                column: "EmpId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Leaves_EmpId",
+                table: "Leaves",
                 column: "EmpId");
 
             migrationBuilder.CreateIndex(

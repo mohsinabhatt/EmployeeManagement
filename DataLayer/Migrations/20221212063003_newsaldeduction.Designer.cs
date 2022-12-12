@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221209125131_datetime")]
-    partial class datetime
+    [Migration("20221212063003_newsaldeduction")]
+    partial class newsaldeduction
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,6 +98,12 @@ namespace DataLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmpId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("LegalLeaves")
                         .HasColumnType("int");
 
@@ -108,6 +114,8 @@ namespace DataLayer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmpId");
 
                     b.ToTable("Leaves");
                 });
@@ -239,6 +247,17 @@ namespace DataLayer.Migrations
                         .HasForeignKey("EmpId");
 
                     b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("DataLayer.Leave", b =>
+                {
+                    b.HasOne("DataLayer.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmpId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("DataLayer.Salary", b =>

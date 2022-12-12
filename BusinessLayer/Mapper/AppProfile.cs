@@ -70,6 +70,16 @@ namespace BusinessLayer
         }
     }
 
+    public sealed class SalaryDeductionProfile : Profile
+    {
+        public SalaryDeductionProfile()
+        {
+            CreateMap<SalaryDeductionRequest, SalaryDeduction>();
+            CreateMap<SalaryDeduction, SalaryDeductionResponse>();
+        }
+    }
+
+
     public sealed class UpdateSalaryProfile :Profile
     {
         public UpdateSalaryProfile()

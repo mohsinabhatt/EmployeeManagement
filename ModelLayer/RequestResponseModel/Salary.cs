@@ -41,15 +41,16 @@ namespace ModelLayer
 
     public class SalaryDeductionRequest
     {
+        public  Guid empId { get; set; }
+    }
+    public class SalaryDeductionResponse 
+    {
         public int LeaveDeductedSal { get; set; }
 
         public int PF { get; set; }
 
         public int TotalSalary { get; set; }
 
-    }
-    public class SalaryDeductionResponse :SalaryDeductionRequest
-    {
-        public Guid Id { get; set; }
+        public Guid EmpId { get; set; }
     }
 }

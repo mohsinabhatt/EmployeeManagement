@@ -187,5 +187,28 @@ namespace BusinessLayer
             if (adminRepository.UpdateAndSave(leave) != 0) return updateLeaveRequest;
             return null;
         }
+
+        public SalaryDeductionResponse SalaryDeduction(SalaryDeductionRequest salaryDeductionRequest)
+        {
+            var employeeLeave = adminRepository.FindBy<Leave>(x => x.EmpId == salaryDeductionRequest.empId && x.Date.Date == DateTime.Now.Date).FirstOrDefault();
+            if (employeeLeave != null)
+            {
+                var employeeSalary = adminRepository.FindBy<Salary>(x => x.EmpId == salaryDeductionRequest.empId).FirstOrDefault();
+                if (employeeSalary != null)
+                {
+                    SalaryDeduction salaryDeduction = new()
+                    {
+                        Id = employeeSalary.Id,
+                        LeaveId = employeeLeave.Id,
+                        LeaveDeductedSal = employeeSalary.BasicSalary / 30 * employeeLeave.TotalLeaves,
+                        PF = employeeSalary.BasicSalary * 12 / 100,
+                    };
+                    salaryDeduction.TotalSalary = employeeSalary.BasicSalary + employeeSalary.TA + employeeSalary.DA + employeeSalary.HRA - salaryDeduction.LeaveDeductedSal - salaryDeduction.PF;
+                    if (adminRepository.AddAndSave(salaryDeduction) != 0)
+                        return mapper.Map<SalaryDeductionResponse>(salaryDeduction);
+                }
+            }
+            return null;
+        }
     }
 }

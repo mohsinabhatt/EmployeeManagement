@@ -138,7 +138,7 @@ namespace WebApi
             return BadRequest();
         }
 
-        [HttpPost("LeaveDetail")]
+        [HttpPost("AddLeave")]
         public IActionResult EntryLeave([FromBody] LeaveDetailRequest leaveDetailRequest)
         {
             var leave = adminManager.EntryLeave(leaveDetailRequest);    
@@ -146,7 +146,7 @@ namespace WebApi
             return BadRequest();
         }
 
-        [HttpPost("Leave")]
+        [HttpPost("TotalLeaveOfEmployee")]
         public IActionResult LeaveEmp([FromBody] LeaveRequest leaveRequest)
         {
             var leave = adminManager.LeaveCount(leaveRequest);
@@ -154,11 +154,19 @@ namespace WebApi
             return BadRequest();    
         }
 
-        [HttpPost("Updateleave")]
+        [HttpPut("Updateleave")]
         public IActionResult UpdateLeave(UpdateLeaveRequest updateLeaveRequest)
         {
             var leave = adminManager.UpdateLeave(updateLeaveRequest);
             if (leave != null) return Ok(leave);
+            return BadRequest();
+        }
+
+        [HttpPost("SalaryDeduction")]
+        public IActionResult DeductedSalary([FromBody] SalaryDeductionRequest salaryDeductionRequest)
+        {
+            var salaryDeducted = adminManager.SalaryDeduction(salaryDeductionRequest);  
+            if( salaryDeducted != null) return Ok(salaryDeducted);
             return BadRequest();
         }
     }

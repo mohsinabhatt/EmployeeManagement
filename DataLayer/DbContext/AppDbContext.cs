@@ -17,9 +17,13 @@ namespace DataLayer
         #region DbSets
 
         public DbSet<User> Users { get; set; }
+
         public DbSet<Employee> Employees { get; set; }
+
         public DbSet<Salary> Salaries { get; set; }
+
         public DbSet<SalaryDeduction> SalaryDeductions{ get; set; }
+
         public DbSet<Leave> Leaves { get; set; }
 
         public DbSet<LeaveDetails> LeaveDetails { get; set; }
