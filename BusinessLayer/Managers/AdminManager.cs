@@ -30,8 +30,6 @@ namespace BusinessLayer
         {
             var user = mapper.Map<User>(signUpRequest);
             user.Salt = AppEncryption.CreateSalt();
-            user.IsActive = true;
-            user.IsDeleted = false;
             user.Id = Guid.NewGuid();
             user.UserRole = UserRole.Admin;
             user.Password = AppEncryption.CreatePasswordHash(signUpRequest.Password, user.Salt);
@@ -41,17 +39,16 @@ namespace BusinessLayer
         }
         public EmployeeResponse AddEmployee(EmployeeSignUpRequest employeeSignUpRequest)
         {
+            if (adminRepository.FindBy<Employee>(x => x.EmpCode == employeeSignUpRequest.EmpCode).FirstOrDefault() != null) return null;
             var employee = mapper.Map<Employee>(employeeSignUpRequest);
-            employee.IsActive = true;
             employee.Id = Guid.NewGuid();
             employee.UserRole = UserRole.Employee;
-            employee.IsDeleted = false;
             if (adminRepository.AddAndSave(employee) != 0)
                 return mapper.Map<EmployeeResponse>(employee);
             return null;
         }
 
-        public IEnumerable<UserResponse> GetAddmins()
+        public IEnumerable<UserResponse> GetAdmins()
         {
             return adminRepository.GetAllAdmins();
         }

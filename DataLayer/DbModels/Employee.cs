@@ -20,9 +20,9 @@ namespace DataLayer
 
         public UserRole UserRole { get; set; }
 
-        public bool? IsActive { get; set; }
+        public bool? IsActive { get; set; } = true;
 
-        public bool? IsDeleted { get; set; }
+        public bool? IsDeleted { get; set; } = false;
 
         public string Address { get; set; }
 

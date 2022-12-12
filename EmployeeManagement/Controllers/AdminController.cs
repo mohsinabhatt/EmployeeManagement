@@ -36,7 +36,7 @@ namespace WebApi
         [HttpGet("Admin")]
         public IActionResult Get()
         {
-            var users = adminManager.GetAddmins();
+            var users = adminManager.GetAdmins();
             if (users != null) return Ok(users);
             return BadRequest();
         }
