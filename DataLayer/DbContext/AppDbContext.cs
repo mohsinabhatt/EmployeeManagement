@@ -28,7 +28,7 @@ namespace DataLayer
 
         public DbSet<LeaveDetails> LeaveDetails { get; set; }
 
-
+        public DbSet<Experience> Experiences { get; set; }
 
         #endregion
     }

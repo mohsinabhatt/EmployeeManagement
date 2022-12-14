@@ -210,5 +210,76 @@ namespace BusinessLayer
             }
             return null;
         }
+
+        public ExperienceRequest AddExperience(ExperienceRequest experienceRequest)
+        {
+            if (adminRepository.FindBy<Employee>(x => x.Id == experienceRequest.EmpId).FirstOrDefault() == null) return null;
+            if (adminRepository.FindBy<Experience>(x => x.EmpId == experienceRequest.EmpId && x.CompanyName == experienceRequest.CompanyName && x.From == experienceRequest.From && x.To == experienceRequest.To ).FirstOrDefault() != null) return null;
+            Experience experience = new Experience()
+            {
+                Id = Guid.NewGuid(),
+                EmpId = experienceRequest.EmpId,
+                CompanyName = experienceRequest.CompanyName,
+                Salary = experienceRequest.Salary,
+                From = experienceRequest.From.Date,
+                To = experienceRequest.To.Date,
+            };
+
+            if (experienceRequest.To.Month < experienceRequest.From.Month)
+            {
+                int yearr = experience.To.Year - experience.From.Year;
+                int monthh = experience.To.Month - experience.From.Month;
+                experience.TotalExperience = $"{yearr} year {-monthh} months";
+            }
+            else if (experienceRequest.To.Month > experienceRequest.From.Month)
+            {
+                int year = experience.To.Year - experience.From.Year;
+                int month = experience.To.Month - experience.From.Month;
+                experience.TotalExperience = $"{year} year {month} months";
+            }
+
+            if (adminRepository.AddAndSave(experience) != 0)
+                return experienceRequest;
+            return null;
+        }
+
+        public ExperienceUpdateRequest UpdateExperience(ExperienceUpdateRequest experienveUpdateRequest)
+        {
+            var exp = adminRepository.FindBy<Experience>(x => x.Id == experienveUpdateRequest.Id && x.EmpId == experienveUpdateRequest.EmpId).FirstOrDefault();
+            if (exp != null)
+            {
+                exp.Id = experienveUpdateRequest.Id;
+                exp.EmpId = experienveUpdateRequest.EmpId;
+                exp.CompanyName = experienveUpdateRequest.CompanyName;
+                exp.Salary = experienveUpdateRequest.Salary;
+                exp.From = experienveUpdateRequest.From.Date;
+                exp.To = experienveUpdateRequest.To.Date;
+
+                if (experienveUpdateRequest.To.Month < experienveUpdateRequest.From.Month)
+                {
+                    int yearr = exp.To.Year - exp.From.Year;
+                    int monthh = exp.To.Month - exp.From.Month;
+                    exp.TotalExperience = $"{yearr} year {-monthh} months";
+                }
+                else if (experienveUpdateRequest.To.Month > experienveUpdateRequest.From.Month)
+                {
+                    int year = exp.To.Year - exp.From.Year;
+                    int month = exp.To.Month - exp.From.Month;
+                    exp.TotalExperience = $"{year} year {month} months";
+                }
+
+                if (adminRepository.UpdateAndSave(exp) != 0)
+                    return experienveUpdateRequest;
+            }
+            return null;
+        }
+
+        public int DeleteExperience(Guid id)
+        {
+            var exp = adminRepository.GetById<Experience>(id);
+            exp.IsDeleted = true;
+            if (adminRepository.UpdateAndSave(exp) != 0) return 1;
+            return 0;
+        }
     }
 }

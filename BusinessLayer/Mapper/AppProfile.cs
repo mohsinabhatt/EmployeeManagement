@@ -97,5 +97,14 @@ namespace BusinessLayer
         }
     }
 
+
+    public sealed class ExperineceProfile :Profile
+    {
+        public ExperineceProfile()
+        {
+            CreateMap<ExperienceRequest,Experience>();
+            CreateMap<Experience, ExperienceResponse>();
+        }
+    }
  
 }

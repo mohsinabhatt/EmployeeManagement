@@ -4,6 +4,7 @@ using DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221212071354_experience")]
+    partial class experience
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,40 +90,6 @@ namespace DataLayer.Migrations
                     b.HasIndex("EmpId");
 
                     b.ToTable("Employees");
-                });
-
-            modelBuilder.Entity("DataLayer.Experience", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CompanyName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("EmpId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("From")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Salary")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("To")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TotalExperience")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Experiences");
                 });
 
             modelBuilder.Entity("DataLayer.Leave", b =>
@@ -273,10 +242,6 @@ namespace DataLayer.Migrations
                         .WithMany("Employees")
                         .HasForeignKey("DeptId");
 
-                    b.HasOne("DataLayer.Experience", null)
-                        .WithMany("Employees")
-                        .HasForeignKey("EmpId");
-
                     b.HasOne("DataLayer.LeaveDetails", null)
                         .WithMany("Employees")
                         .HasForeignKey("EmpId");
@@ -332,11 +297,6 @@ namespace DataLayer.Migrations
                 {
                     b.Navigation("Salary")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DataLayer.Experience", b =>
-                {
-                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("DataLayer.Leave", b =>

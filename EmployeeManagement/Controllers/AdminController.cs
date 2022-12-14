@@ -26,7 +26,7 @@ namespace WebApi
 
 
         [HttpPost("AdminSignup")]
-        public IActionResult Post(SignUpRequest signUpRequest)
+        public IActionResult Post([FromBody] SignUpRequest signUpRequest)
         {
            var admin = adminManager.AddAdmin(signUpRequest);
             if(admin != null) return Ok(admin);
@@ -69,7 +69,7 @@ namespace WebApi
 
 
         [HttpPost("EmployeeSignup")]
-        public IActionResult Post(EmployeeSignUpRequest employeeRequest)
+        public IActionResult Post([FromBody] EmployeeSignUpRequest employeeRequest)
         {
             var employee = adminManager.AddEmployee(employeeRequest);
             if (employee != null) return Ok(employee);
@@ -96,7 +96,7 @@ namespace WebApi
 
 
         [HttpPut("Employee")]
-        public IActionResult UpdateEmployee(UpdateEmployeeRequest updateEmployee)
+        public IActionResult UpdateEmployee([FromBody] UpdateEmployeeRequest updateEmployee)
         {
             var employee = adminManager.UpdateEmployee(updateEmployee);
             if(employee != null) return Ok(employee);
@@ -123,7 +123,7 @@ namespace WebApi
 
 
         [HttpGet("SalaryByEmpId{empId:guid}")]
-        public IActionResult GetSalaryByEmpId(Guid empId)
+        public IActionResult GetSalaryByEmpId([FromRoute] Guid empId)
         {
             var salary = adminManager.GetSalaryByEmpId(empId);
             if (salary != null) return Ok(salary);
@@ -168,6 +168,30 @@ namespace WebApi
             var salaryDeducted = adminManager.SalaryDeduction(salaryDeductionRequest);  
             if( salaryDeducted != null) return Ok(salaryDeducted);
             return BadRequest();
+        }
+
+        [HttpPost("AddExperinece")]
+        public IActionResult AddExperience([FromBody] ExperienceRequest experienceRequest)
+        {
+            var experienceDetails = adminManager.AddExperience(experienceRequest);
+            if(experienceDetails != null) return Ok(experienceDetails);
+            return BadRequest();
+        }
+
+        [HttpPut("UpdateExperience")]   
+        public IActionResult UpdateExperience([FromBody] ExperienceUpdateRequest experienceUpdateRequest)
+        {
+            var updateExperience = adminManager.UpdateExperience(experienceUpdateRequest);  
+            if(updateExperience != null) return Ok(updateExperience);   
+            return BadRequest();
+        }
+
+        [HttpDelete("Deleteexperience/{id:guid}")]
+        public IActionResult DeleteExperience([FromRoute] Guid id)
+        {
+            var experience = adminManager.DeleteExperience(id);
+            if (experience != 0) return Ok(experience);
+            return BadRequest();             
         }
     }
 
