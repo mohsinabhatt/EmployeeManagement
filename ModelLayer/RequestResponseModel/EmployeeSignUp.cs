@@ -46,7 +46,6 @@ namespace ModelLayer
 
         public string ContactNo { get; set; }
 
-        public string? EmpCode { get; set; }
 
         public Guid? DeptId { get; set; }
 

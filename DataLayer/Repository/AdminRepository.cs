@@ -41,6 +41,7 @@ namespace DataLayer
         {
             string query = $@"Update Salaries Set BasicSalary='{updateSalary.BasicSalary}',
                            TA ='{updateSalary.TA}',
+                           DA = '{updateSalary.DA}',
                            HRA='{updateSalary.HRA}' 
                            where id ='{updateSalary.Id}'";
             return ExecuteQuery(query);

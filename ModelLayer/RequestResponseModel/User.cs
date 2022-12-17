@@ -64,8 +64,6 @@ namespace ModelLayer
 
         public string ContactNo { get; set; }
 
-        public UserRole UserRole { get; set; }
-
         public bool IsActive { get; set; }
 
     }

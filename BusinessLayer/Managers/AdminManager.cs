@@ -1,14 +1,19 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Castle.Core.Smtp;
 using DataLayer;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.VisualBasic;
 using ModelLayer;
 using Org.BouncyCastle.Math.EC.Rfc7748;
+using SendGrid.Helpers.Mail;
 using SharedLibrary;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Net.Mail;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,11 +24,13 @@ namespace BusinessLayer
     {
         private readonly IMapper mapper;
         private readonly AdminRepository adminRepository;
+        private readonly IEmailSender emailSender;
 
-        public AdminManager(IMapper mapper, AdminRepository adminRepository)
+        public AdminManager(IMapper mapper, AdminRepository adminRepository,IEmailSender emailSender)
         {
             this.mapper = mapper;
             this.adminRepository = adminRepository;
+            this.emailSender = emailSender;
         }
 
         public SignUpResponse AddAdmin(SignUpRequest signUpRequest)
@@ -45,6 +52,72 @@ namespace BusinessLayer
             employee.UserRole = UserRole.Employee;
             if (adminRepository.AddAndSave(employee) != 0)
                 return mapper.Map<EmployeeResponse>(employee);
+            return null;
+        }
+
+
+        public int ChangePassword(ChangePasswordRequest changePasswordRequest)
+        {
+            var user = adminRepository.GetById<User>(changePasswordRequest.Id);
+            if(user != null)
+            {
+                string salt = user.Salt;
+                string password = user.Password;
+                string oldPassword = AppEncryption.CreatePasswordHash(changePasswordRequest.OldPassword,salt);
+
+                if(oldPassword.Equals(password))
+                {
+                    user.Salt = AppEncryption.CreateSalt();
+                    user.Password = AppEncryption.CreatePasswordHash(changePasswordRequest.NewPassword, user.Salt);
+                    if (adminRepository.UpdateAndSave(user) != 0) return 1;
+                }
+            }
+            return 0;
+        }
+
+        public string ForgetPassword(ForgotPasswordRequest forgotPasswordRequest,string link,IEmailSender emailSender)
+        {
+            User user = adminRepository.FindBy<User>(x => x.Email == forgotPasswordRequest.Email).FirstOrDefault();
+            if(user != null)
+            {
+                Guid guid = Guid.NewGuid();
+                user.ResetCode = guid.ToString();
+                link += guid;
+                var value = adminRepository.UpdateAndSave(user);   
+                if(value != 0)
+                {
+                    var x = SendResetEmail(user, link);
+                    return "success";
+                }
+            }
+            return "NotExist";
+        }
+
+
+        public async Task SendResetEmail( User request,string link)
+        {
+            
+            var email = new List<string>(); 
+            email.Add(request.Email);
+            string subject = "Reset Password";
+            StringBuilder stringBuilder = new();
+            stringBuilder.AppendFormat("Please Click on the link to reset Password\t");
+            stringBuilder.AppendFormat(link);
+            string body = stringBuilder.ToString();
+            emailSender?.Send("Employee Management", email[0], subject, body);
+        }
+
+        public string ResetPassword(Guid resetCode,ResetPasswordRequest resetPasswordRequest)
+        {
+            User user = adminRepository.FindBy<User>(x => x.ResetCode == resetCode.ToString()).FirstOrDefault();
+            if(user != null)
+            {
+                user.Salt = AppEncryption.CreateSalt();
+                user.Password = AppEncryption.CreatePasswordHash(resetPasswordRequest.NewPassword,user.Salt);
+                user.ResetCode = null;
+                adminRepository.UpdateAndSave(user);
+                return "Password Reset Successfully";
+            }
             return null;
         }
 
@@ -70,7 +143,7 @@ namespace BusinessLayer
 
         public UpdateUserRequest UpdateAdmin(UpdateUserRequest updateUserRequest)
         {
-            var user = mapper.Map<User>(updateUserRequest);
+           var user = mapper.Map<User>(updateUserRequest);
             if (adminRepository.UpdateAndSave(user) != 0)
                 return updateUserRequest;
             return null;
@@ -78,9 +151,20 @@ namespace BusinessLayer
 
         public UpdateEmployeeRequest UpdateEmployee(UpdateEmployeeRequest updateemployee)
         {
-            var employee = mapper.Map<Employee>(updateemployee);
-            if (adminRepository.UpdateAndSave(employee) != 0)
-                return updateemployee;
+            var employee = adminRepository.GetById<Employee>(updateemployee.Id);
+            if(employee != null)
+            {
+                employee.Id = updateemployee.Id;
+                employee.Name = updateemployee.Name;
+                employee.ContactNo = updateemployee.ContactNo;
+                employee.Email = updateemployee.Email;
+                employee.Gender = updateemployee.Gender;
+                employee.Address = updateemployee.Address;
+                employee.DeptId = updateemployee.DeptId;
+                employee.IsActive = updateemployee.IsActive;
+                if (adminRepository.UpdateAndSave(employee) != 0)
+                    return updateemployee;
+            }
             return null;
         }
 

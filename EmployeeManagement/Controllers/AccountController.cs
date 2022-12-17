@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using BusinessLayer;
 using DataLayer;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using ModelLayer;
+using Org.BouncyCastle.Ocsp;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -36,6 +38,13 @@ namespace WebApi
 
             }
             return BadRequest("Invalid Credentials");
+        }
+
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return Redirect("/");
         }
 
         private string GenerateJSONWebToken(LoginResponse loginResponse)

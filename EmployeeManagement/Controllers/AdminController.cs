@@ -1,26 +1,34 @@
 ﻿using AutoMapper;
 using BusinessLayer;
+using Castle.Core.Smtp;
 using DataLayer;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.Identity.Client;
 using ModelLayer;
+using SharedLibrary;
 using System.Diagnostics.Contracts;
+using System.Security.Claims;
 
 namespace WebApi
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class AdminController : ControllerBase
     {
         private readonly AdminManager adminManager;
         private readonly AdminRepository adminRepository;
+        private readonly IEmailSender emailSender;
 
-        public AdminController(IMapper mapper,AdminRepository adminRepository)
+        public AdminController(IMapper mapper,AdminRepository adminRepository,IEmailSender emailSender)
         {
-            adminManager = new AdminManager(mapper, adminRepository);
+            adminManager = new AdminManager(mapper, adminRepository, emailSender);
             this.adminRepository = adminRepository;
         }
 
@@ -66,6 +74,30 @@ namespace WebApi
             return BadRequest();
         }
 
+        [HttpPut("ChangePassword")]
+        public IActionResult ChangeAdminPassword([FromBody] ChangePasswordRequest changePasswordRequest)
+        {
+            var admin = adminManager.ChangePassword(changePasswordRequest); 
+            if(admin != 0) return Ok(admin);    
+            return BadRequest();
+        }
+
+        [HttpPut("ForgotPassword")]
+        public IActionResult ForgetPassword([FromBody] ForgotPasswordRequest forgotPasswordRequest, [FromServices] IEmailSender email)
+        {
+            string link = Request.GetEncodedUrl().Replace(Request.Path.ToUriComponent(), "/api/Admin/ResetPassword/ResetCode/");
+            string message = adminManager.ForgetPassword(forgotPasswordRequest, link, email);
+            if(message != null) return Ok(message);
+            return BadRequest();
+        }
+
+        [HttpPost("ResetPassword/ResetCode/{resetcode:guid}")]
+        public IActionResult ResetPassword([FromRoute] Guid resetcode,[FromBody] ResetPasswordRequest resetPasswordRequest)
+        {
+            var user = adminManager.ResetPassword(resetcode, resetPasswordRequest);
+            if (user != null) return Ok(user);
+            return BadRequest();
+        }
 
 
         [HttpPost("EmployeeSignup")]

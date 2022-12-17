@@ -1,7 +1,9 @@
 using AutoMapper;
 using BusinessLayer;
+using Castle.Core.Smtp;
 using DataLayer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -18,10 +20,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(AppProfile)));
+builder.Services.AddTransient<IEmailSender,MailJetSender>();
 builder.Services.AddDatAccessServices(System.Reflection.Assembly.GetAssembly(typeof(AppDbContext)));
 builder.Services.AddDbContextPool<AppDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString(nameof(AppDbContext))));
-
 
 builder.Services.AddAuthentication(x =>
 {
@@ -65,6 +67,8 @@ app.UseCors("EmployeeManagement");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseAuthentication();    
 
 app.MapControllers();
 

@@ -49,7 +49,7 @@ namespace SharedLibrary
 
             MailMessage mail = new MailMessage
             {
-                From = mailSetting.From ?? new MailAddress(config.From, config.DisplayName),
+                From = mailSetting.From =new MailAddress(config.From, config.DisplayName),
                 Subject = mailSetting.Subject,
                 Body = mailSetting.Body,
                 IsBodyHtml = mailSetting.IsBodyHtml
