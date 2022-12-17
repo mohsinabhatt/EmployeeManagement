@@ -86,9 +86,9 @@ namespace WebApi
         public IActionResult ForgetPassword([FromBody] ForgotPasswordRequest forgotPasswordRequest, [FromServices] IEmailSender email)
         {
             //string link = Request.GetEncodedUrl().Replace(Request.Path.ToUriComponent(), "/api/Admin/ResetPassword/ResetCode/");
-            string link = "http://localhost:4200/auth/reset-password/reset-code";
+            string link = "http://localhost:4200/auth/reset-password/reset-code/";
 
-            string message = adminManager.ForgetPassword(forgotPasswordRequest, "http://localhost:4200/auth/reset-password/reset-code/", email);
+            string message = adminManager.ForgetPassword(forgotPasswordRequest, link , email);
             if (message != null) return Ok(message);
             return BadRequest();
         }
