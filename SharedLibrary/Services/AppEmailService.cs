@@ -40,7 +40,7 @@ namespace SharedLibrary
 
         internal override async Task SendAsync(MailSetting mailSetting)
         {
-            
+
             if (mailSetting.To.IsNullOrEmpty() && mailSetting.CC.IsNullOrEmpty())
                 return;
 
@@ -49,12 +49,12 @@ namespace SharedLibrary
 
             MailMessage mail = new MailMessage
             {
-                From = mailSetting.From =new MailAddress(config.From, config.DisplayName),
+                From = mailSetting.From ?? new MailAddress(config.From, config.DisplayName),
                 Subject = mailSetting.Subject,
                 Body = mailSetting.Body,
                 IsBodyHtml = mailSetting.IsBodyHtml
             };
-          
+
             mailSetting.To?.ForEach(x => mail.To.Add(new MailAddress(x)));
             mailSetting.CC?.ForEach(x => mail.CC.Add(new MailAddress(x)));
             mailSetting.Attachments?.ForEach(x => mail.Attachments.Add(x));
