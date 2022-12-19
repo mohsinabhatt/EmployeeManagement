@@ -27,6 +27,7 @@ namespace WebApi
         }
 
         [HttpPost("login")]
+        [Authorize]
         public IActionResult Post([FromBody] LoginRequest loginRequest)
         {
            var loginResponse = accountManager.LogIn(loginRequest);
@@ -41,6 +42,7 @@ namespace WebApi
         }
 
         [HttpGet("logout")]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();

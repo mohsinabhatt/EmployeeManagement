@@ -34,6 +34,7 @@ namespace WebApi
 
 
         [HttpPost("AdminSignup")]
+        [Authorize]
         public IActionResult Post([FromBody] SignUpRequest signUpRequest)
         {
            var admin = adminManager.AddAdmin(signUpRequest);
@@ -42,6 +43,7 @@ namespace WebApi
         }
 
         [HttpGet("Admin")]
+        [Authorize]
         public IActionResult Get()
         {
             var users = adminManager.GetAdmins();
@@ -51,6 +53,7 @@ namespace WebApi
 
 
         [HttpGet("AdminById/{id:guid}")]
+        [Authorize]
         public IActionResult GetAdminById([FromRoute] Guid id)
         {
             var user = adminManager.GetAdminById(id);
@@ -59,6 +62,7 @@ namespace WebApi
         }
 
         [HttpPut("Admin")]
+        [Authorize]
         public IActionResult UpdateAdmin([FromBody] UpdateUserRequest updateUserRequest)
         {
             var data = adminManager.UpdateAdmin(updateUserRequest);
@@ -67,6 +71,7 @@ namespace WebApi
         }
 
         [HttpDelete("Deleteadmin/{id:guid}")]
+        [Authorize]
         public IActionResult Delete([FromRoute] Guid id)
         {
             var user = adminManager.Delete(id);
@@ -83,6 +88,7 @@ namespace WebApi
         }
 
         [HttpPut("ForgotPassword")]
+        [Authorize]
         public IActionResult ForgetPassword([FromBody] ForgotPasswordRequest forgotPasswordRequest, [FromServices] IEmailSender email)
         {
             //string link = Request.GetEncodedUrl().Replace(Request.Path.ToUriComponent(), "/api/Admin/ResetPassword/ResetCode/");
@@ -94,6 +100,7 @@ namespace WebApi
         }
 
         [HttpPost("ResetPassword/ResetCode/{resetcode:guid}")]
+        [Authorize]
         public IActionResult ResetPassword([FromRoute] Guid resetcode,[FromBody] ResetPasswordRequest resetPasswordRequest)
         {
             var user = adminManager.ResetPassword(resetcode, resetPasswordRequest);
@@ -103,6 +110,7 @@ namespace WebApi
 
 
         [HttpPost("EmployeeSignup")]
+        [Authorize]
         public IActionResult Post([FromBody] EmployeeSignUpRequest employeeRequest)
         {
             var employee = adminManager.AddEmployee(employeeRequest);
@@ -112,6 +120,7 @@ namespace WebApi
 
 
         [HttpGet("Employee")]
+        [Authorize]
         public IActionResult GetEmployees()
         {
             var employee = adminManager.GetEmployees();
@@ -121,6 +130,7 @@ namespace WebApi
 
 
         [HttpGet("EmployeeById/{id:guid}")]
+        [Authorize]
         public IActionResult GetEmployeeById([FromRoute] Guid id)
         {
             var user = adminManager.GetEmployeeById(id);
@@ -130,6 +140,7 @@ namespace WebApi
 
 
         [HttpPut("Employee")]
+        [Authorize]
         public IActionResult UpdateEmployee([FromBody] UpdateEmployeeRequest updateEmployee)
         {
             var employee = adminManager.UpdateEmployee(updateEmployee);
@@ -139,6 +150,7 @@ namespace WebApi
 
 
         [HttpDelete("deleteemployee/{id:guid}")]
+        [Authorize]
         public IActionResult DeleteEmployee([FromRoute] Guid id)
         {
             var user = adminManager.DeleteEmployee(id);
@@ -148,6 +160,7 @@ namespace WebApi
 
 
         [HttpPost("AddSalary/{empId:guid}")]
+        [Authorize]
         public IActionResult AddSalary([FromRoute] Guid empId,[FromBody] SalaryRequest salaryRequest)
         {
             var salary = adminManager.AddSalary(empId,salaryRequest);   
@@ -157,6 +170,7 @@ namespace WebApi
 
 
         [HttpGet("SalaryByEmpId{empId:guid}")]
+        [Authorize]
         public IActionResult GetSalaryByEmpId([FromRoute] Guid empId)
         {
             var salary = adminManager.GetSalaryByEmpId(empId);
@@ -165,6 +179,7 @@ namespace WebApi
         }
 
         [HttpPut("Salary")]
+        [Authorize]
         public IActionResult UpdateSalary([FromBody] UpdateSalaryRequest updateSalary)
         {
             var salary = adminManager.UpdateSalary(updateSalary);
@@ -173,6 +188,7 @@ namespace WebApi
         }
 
         [HttpPost("AddLeave")]
+        [Authorize]
         public IActionResult EntryLeave([FromBody] LeaveDetailRequest leaveDetailRequest)
         {
             var leave = adminManager.EntryLeave(leaveDetailRequest);    
@@ -181,6 +197,7 @@ namespace WebApi
         }
 
         [HttpPost("TotalLeaveOfEmployee")]
+        [Authorize]
         public IActionResult LeaveEmp([FromBody] LeaveRequest leaveRequest)
         {
             var leave = adminManager.LeaveCount(leaveRequest);
@@ -189,6 +206,7 @@ namespace WebApi
         }
 
         [HttpPut("Updateleave")]
+        [Authorize]
         public IActionResult UpdateLeave(UpdateLeaveRequest updateLeaveRequest)
         {
             var leave = adminManager.UpdateLeave(updateLeaveRequest);
@@ -197,6 +215,7 @@ namespace WebApi
         }
 
         [HttpPost("SalaryDeduction")]
+        [Authorize]
         public IActionResult DeductedSalary([FromBody] SalaryDeductionRequest salaryDeductionRequest)
         {
             var salaryDeducted = adminManager.SalaryDeduction(salaryDeductionRequest);  
@@ -205,6 +224,7 @@ namespace WebApi
         }
 
         [HttpPost("AddExperinece")]
+        [Authorize]
         public IActionResult AddExperience([FromBody] ExperienceRequest experienceRequest)
         {
             var experienceDetails = adminManager.AddExperience(experienceRequest);
@@ -212,7 +232,8 @@ namespace WebApi
             return BadRequest();
         }
 
-        [HttpPut("UpdateExperience")]   
+        [HttpPut("UpdateExperience")]
+        [Authorize]
         public IActionResult UpdateExperience([FromBody] ExperienceUpdateRequest experienceUpdateRequest)
         {
             var updateExperience = adminManager.UpdateExperience(experienceUpdateRequest);  
@@ -221,6 +242,7 @@ namespace WebApi
         }
 
         [HttpDelete("Deleteexperience/{id:guid}")]
+        [Authorize]
         public IActionResult DeleteExperience([FromRoute] Guid id)
         {
             var experience = adminManager.DeleteExperience(id);
