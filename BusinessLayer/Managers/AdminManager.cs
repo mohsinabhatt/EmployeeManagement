@@ -143,10 +143,25 @@ namespace BusinessLayer
 
         public UpdateUserRequest UpdateAdmin(UpdateUserRequest updateUserRequest)
         {
-           var user = mapper.Map<User>(updateUserRequest);
-            if (adminRepository.UpdateAndSave(user) != 0)
-                return updateUserRequest;
+            var admin = adminRepository.GetById<User>(updateUserRequest.Id);
+            if(admin != null)
+            {
+                admin.Id = updateUserRequest.Id;
+                admin.Name = updateUserRequest.Name;
+                admin.ContactNo = updateUserRequest.ContactNo;
+                admin.Email = updateUserRequest.Email;
+                admin.UserRole = UserRole.Admin;
+                admin.Gender = updateUserRequest.Gender;
+                admin.IsActive = updateUserRequest.IsActive;
+
+                if(adminRepository.UpdateAndSave(admin) !=0) return updateUserRequest;
+            }
             return null;
+           
+           //var user = mapper.Map<User>(updateUserRequest);
+            //if (adminRepository.UpdateAndSave(user) != 0)
+            //    return updateUserRequest;
+            //return null;
         }
 
         public UpdateEmployeeRequest UpdateEmployee(UpdateEmployeeRequest updateemployee)
