@@ -212,6 +212,14 @@ namespace WebApi
             return BadRequest();
         }
 
+        [HttpGet("getexperiencebyid")]
+        public IActionResult GetExperienceById([FromBody] Guid id)
+        {
+            var response = adminManager.GetExperienceById(id);
+            if (response != null) return Ok(response);
+            return BadRequest();
+        }
+
         [HttpPut("UpdateExperience")]   
         public IActionResult UpdateExperience([FromBody] ExperienceUpdateRequest experienceUpdateRequest)
         {
