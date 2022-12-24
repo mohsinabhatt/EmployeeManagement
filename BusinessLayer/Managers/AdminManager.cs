@@ -47,6 +47,7 @@ namespace BusinessLayer
         public EmployeeResponse AddEmployee(EmployeeSignUpRequest employeeSignUpRequest)
         {
             if (adminRepository.FindBy<Employee>(x => x.EmpCode == employeeSignUpRequest.EmpCode).FirstOrDefault() != null) return null;
+            if (adminRepository.FindBy<Employee>(x => x.Email == employeeSignUpRequest.Email).FirstOrDefault() != null) return null;
             var employee = mapper.Map<Employee>(employeeSignUpRequest);
             employee.Id = Guid.NewGuid();
             employee.UserRole = UserRole.Employee;
