@@ -26,7 +26,7 @@ namespace BusinessLayer
         private readonly AdminRepository adminRepository;
         private readonly IEmailSender emailSender;
 
-        public AdminManager(IMapper mapper, AdminRepository adminRepository,IEmailSender emailSender)
+        public AdminManager(IMapper mapper, AdminRepository adminRepository, IEmailSender emailSender)
         {
             this.mapper = mapper;
             this.adminRepository = adminRepository;
@@ -47,6 +47,7 @@ namespace BusinessLayer
         public EmployeeResponse AddEmployee(EmployeeSignUpRequest employeeSignUpRequest)
         {
             if (adminRepository.FindBy<Employee>(x => x.EmpCode == employeeSignUpRequest.EmpCode).FirstOrDefault() != null) return null;
+            if (adminRepository.FindBy<Employee>(x => x.Email == employeeSignUpRequest.Email).FirstOrDefault() != null) return null;
             var employee = mapper.Map<Employee>(employeeSignUpRequest);
             employee.Id = Guid.NewGuid();
             employee.UserRole = UserRole.Employee;
@@ -59,13 +60,13 @@ namespace BusinessLayer
         public int ChangePassword(ChangePasswordRequest changePasswordRequest)
         {
             var user = adminRepository.GetById<User>(changePasswordRequest.Id);
-            if(user != null)
+            if (user != null)
             {
                 string salt = user.Salt;
                 string password = user.Password;
-                string oldPassword = AppEncryption.CreatePasswordHash(changePasswordRequest.OldPassword,salt);
+                string oldPassword = AppEncryption.CreatePasswordHash(changePasswordRequest.OldPassword, salt);
 
-                if(oldPassword.Equals(password))
+                if (oldPassword.Equals(password))
                 {
                     user.Salt = AppEncryption.CreateSalt();
                     user.Password = AppEncryption.CreatePasswordHash(changePasswordRequest.NewPassword, user.Salt);
@@ -75,16 +76,16 @@ namespace BusinessLayer
             return 0;
         }
 
-        public string ForgetPassword(ForgotPasswordRequest forgotPasswordRequest,string link,IEmailSender emailSender)
+        public string ForgetPassword(ForgotPasswordRequest forgotPasswordRequest, string link, IEmailSender emailSender)
         {
             User user = adminRepository.FindBy<User>(x => x.Email == forgotPasswordRequest.Email).FirstOrDefault();
-            if(user != null)
+            if (user != null)
             {
                 Guid guid = Guid.NewGuid();
                 user.ResetCode = guid.ToString();
                 link += guid;
-                var value = adminRepository.UpdateAndSave(user);   
-                if(value != 0)
+                var value = adminRepository.UpdateAndSave(user);
+                if (value != 0)
                 {
                     var x = SendResetEmail(user, link);
                     return "success";
@@ -94,10 +95,10 @@ namespace BusinessLayer
         }
 
 
-        public async Task SendResetEmail( User request,string link)
+        public async Task SendResetEmail(User request, string link)
         {
-            
-            var email = new List<string>(); 
+
+            var email = new List<string>();
             email.Add(request.Email);
             string subject = "Reset Password";
             StringBuilder stringBuilder = new();
@@ -107,13 +108,13 @@ namespace BusinessLayer
             emailSender?.Send("Employee Management", email[0], subject, body);
         }
 
-        public string ResetPassword(Guid resetCode,ResetPasswordRequest resetPasswordRequest)
+        public string ResetPassword(Guid resetCode, ResetPasswordRequest resetPasswordRequest)
         {
             User user = adminRepository.FindBy<User>(x => x.ResetCode == resetCode.ToString()).FirstOrDefault();
-            if(user != null)
+            if (user != null)
             {
                 user.Salt = AppEncryption.CreateSalt();
-                user.Password = AppEncryption.CreatePasswordHash(resetPasswordRequest.NewPassword,user.Salt);
+                user.Password = AppEncryption.CreatePasswordHash(resetPasswordRequest.NewPassword, user.Salt);
                 user.ResetCode = null;
                 adminRepository.UpdateAndSave(user);
                 return "Password Reset Successfully";
@@ -144,7 +145,7 @@ namespace BusinessLayer
         public UpdateUserRequest UpdateAdmin(UpdateUserRequest updateUserRequest)
         {
             var admin = adminRepository.GetById<User>(updateUserRequest.Id);
-            if(admin != null)
+            if (admin != null)
             {
                 admin.Id = updateUserRequest.Id;
                 admin.Name = updateUserRequest.Name;
@@ -154,11 +155,11 @@ namespace BusinessLayer
                 admin.Gender = updateUserRequest.Gender;
                 admin.IsActive = updateUserRequest.IsActive;
 
-                if(adminRepository.UpdateAndSave(admin) !=0) return updateUserRequest;
+                if (adminRepository.UpdateAndSave(admin) != 0) return updateUserRequest;
             }
             return null;
-           
-           //var user = mapper.Map<User>(updateUserRequest);
+
+            //var user = mapper.Map<User>(updateUserRequest);
             //if (adminRepository.UpdateAndSave(user) != 0)
             //    return updateUserRequest;
             //return null;
@@ -167,7 +168,7 @@ namespace BusinessLayer
         public UpdateEmployeeRequest UpdateEmployee(UpdateEmployeeRequest updateemployee)
         {
             var employee = adminRepository.GetById<Employee>(updateemployee.Id);
-            if(employee != null)
+            if (employee != null)
             {
                 employee.Id = updateemployee.Id;
                 employee.Name = updateemployee.Name;
@@ -313,7 +314,7 @@ namespace BusinessLayer
         public ExperienceRequest AddExperience(ExperienceRequest experienceRequest)
         {
             if (adminRepository.FindBy<Employee>(x => x.Id == experienceRequest.EmpId).FirstOrDefault() == null) return null;
-            if (adminRepository.FindBy<Experience>(x => x.EmpId == experienceRequest.EmpId && x.CompanyName == experienceRequest.CompanyName && x.From == experienceRequest.From && x.To == experienceRequest.To ).FirstOrDefault() != null) return null;
+            if (adminRepository.FindBy<Experience>(x => x.EmpId == experienceRequest.EmpId && x.CompanyName == experienceRequest.CompanyName && x.From == experienceRequest.From && x.To == experienceRequest.To).FirstOrDefault() != null) return null;
             Experience experience = new Experience()
             {
                 Id = Guid.NewGuid(),
@@ -340,6 +341,15 @@ namespace BusinessLayer
             if (adminRepository.AddAndSave(experience) != 0)
                 return experienceRequest;
             return null;
+        }
+
+        public ExperienceResponse GetExperienceById(Guid id)
+        {
+            var exp = adminRepository.GetById<Experience>(id);
+            if (exp != null)
+                return mapper.Map<ExperienceResponse>(exp);
+            return null;
+
         }
 
         public ExperienceUpdateRequest UpdateExperience(ExperienceUpdateRequest experienveUpdateRequest)
