@@ -187,6 +187,14 @@ namespace WebApi
             return BadRequest();
         }
 
+        [HttpGet("getleavesbyid/{id:guid}")]
+        public IActionResult GetLeavesById([FromRoute] Guid id)
+        {
+           var response = adminManager.GetLeaveById(id);
+            if (response != null) return Ok(response);
+            return BadRequest();
+        }
+
         [HttpPost("AddLeave")]
         [Authorize]
         public IActionResult EntryLeave([FromBody] LeaveDetailRequest leaveDetailRequest)
@@ -211,6 +219,18 @@ namespace WebApi
         {
             var leave = adminManager.UpdateLeave(updateLeaveRequest);
             if (leave != null) return Ok(leave);
+            return BadRequest();
+        }
+
+        [HttpGet("salarydeduction/{id:guid}")]
+        public IActionResult GetSalaryDeduction([FromRoute] Guid id)
+        {
+            SalaryDeductionRequest salaryDeductionRequest = new SalaryDeductionRequest()
+            {
+                empId = id,
+            };
+           var response = adminManager.GetSalaryDeduction(salaryDeductionRequest);
+            if (response != null) return Ok(response);
             return BadRequest();
         }
 

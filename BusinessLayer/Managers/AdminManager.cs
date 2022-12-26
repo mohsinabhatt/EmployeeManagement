@@ -237,6 +237,16 @@ namespace BusinessLayer
             //  return null;
         }
 
+        public IEnumerable<LeaveDetailResponse> GetLeaveById(Guid id)
+        {
+            var response = adminRepository.FindBy<LeaveDetails>(x => x.EmpId == id).Select(z=>new LeaveDetailResponse
+            {
+                EmpId = id,
+                Date= z.Date,
+                Id = z.Id
+            });
+            return response;
+        }
 
         public LeaveDetailRequest EntryLeave(LeaveDetailRequest leaveDetailRequest)
         {
@@ -286,6 +296,15 @@ namespace BusinessLayer
             var leave = mapper.Map<Leave>(updateLeaveRequest);
             if (adminRepository.UpdateAndSave(leave) != 0) return updateLeaveRequest;
             return null;
+        }
+
+        public SalaryDeductionResponse GetSalaryDeduction(SalaryDeductionRequest salaryDeductionRequest)
+        {
+            var x = SalaryDeduction(salaryDeductionRequest);
+            var response = adminRepository.FindBy<SalaryDeduction>(x => x.leave.EmpId == salaryDeductionRequest.empId).FirstOrDefault();
+            if(response!=null) return mapper.Map<SalaryDeductionResponse>(response);
+            return null;
+
         }
 
         public SalaryDeductionResponse SalaryDeduction(SalaryDeductionRequest salaryDeductionRequest)
