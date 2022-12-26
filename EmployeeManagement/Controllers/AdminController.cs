@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using BusinessLayer;
 using Castle.Core.Smtp;
 using DataLayer;
@@ -232,8 +233,8 @@ namespace WebApi
             return BadRequest();
         }
 
-        [HttpGet("getexperiencebyid")]
-        public IActionResult GetExperienceById([FromBody] Guid id)
+        [HttpGet("getexperiencebyid/{id:guid}")]
+        public IActionResult GetExperienceById([FromRoute] Guid id)
         {
             var response = adminManager.GetExperienceById(id);
             if (response != null) return Ok(response);

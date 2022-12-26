@@ -43,7 +43,7 @@ namespace DataLayer
                            TA ='{updateSalary.TA}',
                            DA = '{updateSalary.DA}',
                            HRA='{updateSalary.HRA}' 
-                           where id ='{updateSalary.Id}'";
+                           where EmpId ='{updateSalary.Id}'";
             return ExecuteQuery(query);
         }
 

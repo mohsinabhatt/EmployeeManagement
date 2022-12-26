@@ -300,7 +300,6 @@ namespace BusinessLayer
 
         public SalaryDeductionResponse GetSalaryDeduction(SalaryDeductionRequest salaryDeductionRequest)
         {
-            var x = SalaryDeduction(salaryDeductionRequest);
             var response = adminRepository.FindBy<SalaryDeduction>(x => x.leave.EmpId == salaryDeductionRequest.empId).FirstOrDefault();
             if(response!=null) return mapper.Map<SalaryDeductionResponse>(response);
             return null;
@@ -330,7 +329,7 @@ namespace BusinessLayer
             return null;
         }
 
-        public ExperienceRequest AddExperience(ExperienceRequest experienceRequest)
+        public ExperienceResponse AddExperience(ExperienceRequest experienceRequest)
         {
             if (adminRepository.FindBy<Employee>(x => x.Id == experienceRequest.EmpId).FirstOrDefault() == null) return null;
             if (adminRepository.FindBy<Experience>(x => x.EmpId == experienceRequest.EmpId && x.CompanyName == experienceRequest.CompanyName && x.From == experienceRequest.From && x.To == experienceRequest.To).FirstOrDefault() != null) return null;
@@ -358,15 +357,21 @@ namespace BusinessLayer
             }
 
             if (adminRepository.AddAndSave(experience) != 0)
-                return experienceRequest;
+                return new ExperienceResponse
+                {
+                    Id=experience.Id,
+                    CompanyName=experience.CompanyName,
+                    Salary=experience.Salary,
+                    TotalExperience= experience.TotalExperience,
+                };
             return null;
         }
 
-        public ExperienceResponse GetExperienceById(Guid id)
+        public IEnumerable<ExperienceResponse> GetExperienceById(Guid id)
         {
-            var exp = adminRepository.GetById<Experience>(id);
+            var exp = adminRepository.FindBy<Experience>(x => x.EmpId == id);
             if (exp != null)
-                return mapper.Map<ExperienceResponse>(exp);
+                return mapper.Map<IEnumerable<ExperienceResponse>>(exp);
             return null;
 
         }

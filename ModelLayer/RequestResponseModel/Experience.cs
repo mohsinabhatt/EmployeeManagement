@@ -23,6 +23,8 @@ namespace ModelLayer
     public class ExperienceResponse :ExperienceRequest
     {
         public Guid Id { get; set; }
+
+        public string TotalExperience { get; set; }
     }
 
 
