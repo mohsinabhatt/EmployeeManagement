@@ -230,7 +230,18 @@ namespace BusinessLayer
 
         public int UpdateSalary(UpdateSalaryRequest updateSalary)
         {
-            return adminRepository.UpdateSalary(updateSalary);
+            var employee = adminRepository.FindBy<Salary>(x => x.EmpId == updateSalary.Id).FirstOrDefault();
+            if(employee != null)
+            {
+                employee.EmpId = updateSalary.Id;
+                employee.BasicSalary = updateSalary.BasicSalary;
+                employee.TA = updateSalary.TA;
+                employee.HRA = updateSalary.HRA;
+                employee.DA = updateSalary.DA;
+
+                return adminRepository.UpdateAndSave(employee);
+            }
+            return 0;
             //var salary = mapper.Map<Salary>(updateSalary);
             //  if (adminRepository.UpdateAndSave(salary) != 0)
             //      return updateSalary;
@@ -298,10 +309,9 @@ namespace BusinessLayer
             return null;
         }
 
-        public SalaryDeductionResponse GetSalaryDeduction(SalaryDeductionRequest salaryDeductionRequest)
+        public SalaryDeductionResponse GetSalaryDeduction(Guid id)
         {
-            var x = SalaryDeduction(salaryDeductionRequest);
-            var response = adminRepository.FindBy<SalaryDeduction>(x => x.leave.EmpId == salaryDeductionRequest.empId).FirstOrDefault();
+            var response = adminRepository.FindBy<SalaryDeduction>(x => x.leave.EmpId == id).FirstOrDefault();
             if(response!=null) return mapper.Map<SalaryDeductionResponse>(response);
             return null;
 

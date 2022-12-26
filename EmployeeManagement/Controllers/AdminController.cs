@@ -225,11 +225,8 @@ namespace WebApi
         [HttpGet("salarydeduction/{id:guid}")]
         public IActionResult GetSalaryDeduction([FromRoute] Guid id)
         {
-            SalaryDeductionRequest salaryDeductionRequest = new SalaryDeductionRequest()
-            {
-                empId = id,
-            };
-           var response = adminManager.GetSalaryDeduction(salaryDeductionRequest);
+            
+           var response = adminManager.GetSalaryDeduction(id);
             if (response != null) return Ok(response);
             return BadRequest();
         }
