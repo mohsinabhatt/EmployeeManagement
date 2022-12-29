@@ -251,7 +251,8 @@ namespace BusinessLayer
         public LeaveDetailRequest EntryLeave(LeaveDetailRequest leaveDetailRequest)
         {
             var employee = adminRepository.FindBy<Employee>(x => x.Id == leaveDetailRequest.EmpId).FirstOrDefault();
-            if (leaveDetailRequest.Date <= DateTime.Now)
+            if (employee == null) return null; 
+            if (leaveDetailRequest.Date >= DateTime.Now)
             {
                 LeaveDetails leaveDetails = new LeaveDetails()
                 {
